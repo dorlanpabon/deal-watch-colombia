@@ -1,0 +1,233 @@
+{
+  "country": "CO",
+  "currency": "COP",
+  "queries": [
+    "MacBook Pro M4 24GB",
+    "MacBook Pro M4 Pro 24GB",
+    "MacBook Pro M4 Max 36GB",
+    "MacBook Pro M5 24GB",
+    "MacBook Pro M5 Pro 24GB"
+  ],
+  "criteria": {
+    "minRamGb": 18,
+    "chips": ["M4", "M5"],
+    "requireMacBookPro": true,
+    "rejectUnknownRam": true,
+    "rejectTerms": [
+      "parts only",
+      "for parts",
+      "cannot activate",
+      "empty box",
+      "box only",
+      "speaker issue",
+      "pink hue",
+      "dent",
+      "read",
+      "icloud",
+      "mdm",
+      "locked",
+      "para repuestos",
+      "bloqueado"
+    ],
+    "minLandedCop": 4500000,
+    "maxLandedCop": 8500000,
+    "greatDealCop": 7200000,
+    "minSellerFeedback": 50,
+    "minSellerPositivePct": 97
+  },
+  "costs": {
+    "usdToCopFallback": 3900,
+    "internationalShippingCop": 220000,
+    "courierHandlingCop": 120000,
+    "importVatRate": 0.19,
+    "laptopDutyRate": 0,
+    "localShippingCop": 0
+  },
+  "watch": {
+    "intervalMinutes": 15,
+    "maxResultsPerSource": 50
+  },
+  "sources": {
+    "mercadolibre": {
+      "enabled": true
+    },
+    "mercadolibreMcp": {
+      "enabled": false,
+      "siteId": "MCO"
+    },
+    "shopifySuggest": [
+      {
+        "name": "iShop Colombia",
+        "enabled": true,
+        "baseUrl": "https://co.tiendasishop.com"
+      },
+      {
+        "name": "Mac Center",
+        "enabled": true,
+        "baseUrl": "https://www.mac-center.com"
+      }
+    ],
+    "ebayRss": {
+      "enabled": false,
+      "site": "www.ebay.com",
+      "buyItNowOnly": true
+    },
+    "browser": {
+      "enabled": true,
+      "headless": true,
+      "userDataDir": "data/browser-profile",
+      "waitMs": 1200,
+      "blockResources": ["image", "media", "font"],
+      "blockUrlPatterns": [
+        "googletagmanager",
+        "google-analytics",
+        "doubleclick",
+        "facebook.net",
+        "hotjar",
+        "clarity.ms"
+      ],
+      "sources": [
+        {
+          "name": "eBay",
+          "enabled": true,
+          "searchUrl": "https://www.ebay.com/sch/i.html?_nkw={query}&LH_BIN=1&_sop=15",
+          "itemSelector": "li.s-card",
+          "urlContains": "/itm/",
+          "international": true
+        },
+        {
+          "name": "Enjoy VideoGames",
+          "enabled": false,
+          "searchUrl": "https://enjoyvideogames.com.co/?s={query}&post_type=product",
+          "queries": ["MacBook Pro M4", "MacBook Pro M5"],
+          "itemSelector": ".product.type-product",
+          "urlContains": "/product/",
+          "currency": "COP",
+          "international": false
+        },
+        {
+          "name": "EasyMac",
+          "enabled": false,
+          "searchUrl": "https://easymac.co/?s={query}&post_type=product",
+          "queries": ["MacBook Pro M4", "MacBook Pro M5"],
+          "itemSelector": ".product.type-product",
+          "urlContains": "easymac.co/",
+          "currency": "COP",
+          "international": false
+        },
+        {
+          "name": "Tecnoplaza",
+          "enabled": false,
+          "searchUrl": "https://tecnoplaza.com.co/search?q={query}",
+          "queries": ["MacBook Pro M4", "MacBook Pro M5"],
+          "itemSelector": ".product-card-wrapper",
+          "urlContains": "/products/",
+          "currency": "COP",
+          "international": false
+        },
+        {
+          "name": "MercadoLibre CO",
+          "enabled": false,
+          "searchUrl": "https://listado.mercadolibre.com.co/{query}",
+          "itemSelector": "li.ui-search-layout__item",
+          "urlContains": "mercadolibre.com.co",
+          "currency": "COP",
+          "international": false
+        },
+        {
+          "name": "Alkosto",
+          "enabled": true,
+          "searchUrl": "https://www.alkosto.com/search?text={query}",
+          "queries": ["MacBook Pro M4", "MacBook Pro M5"],
+          "itemSelector": ".js-product-item",
+          "urlContains": "alkosto.com/",
+          "currency": "COP",
+          "international": false
+        },
+        {
+          "name": "Ktronix",
+          "enabled": true,
+          "searchUrl": "https://www.ktronix.com/search?text={query}",
+          "queries": ["MacBook Pro M4", "MacBook Pro M5"],
+          "itemSelector": ".js-product-item",
+          "urlContains": "ktronix.com/",
+          "currency": "COP",
+          "international": false
+        },
+        {
+          "name": "Falabella CO",
+          "enabled": true,
+          "searchUrl": "https://www.falabella.com.co/falabella-co/search?Ntt={query}",
+          "queries": ["MacBook Pro M4", "MacBook Pro M5"],
+          "itemSelector": "a[href*=\"/falabella-co/product/\"]",
+          "urlContains": "/product/",
+          "currency": "COP",
+          "international": false
+        }
+      ]
+    },
+    "patchrightBrowser": {
+      "enabled": false,
+      "headless": false,
+      "userDataDir": "data/patchright-profile",
+      "sourcePrefix": "Patchright",
+      "waitMs": 1200,
+      "blockResources": ["image", "media", "font"],
+      "blockUrlPatterns": [
+        "googletagmanager",
+        "google-analytics",
+        "doubleclick",
+        "facebook.net",
+        "hotjar",
+        "clarity.ms"
+      ],
+      "sources": [
+        {
+          "name": "MercadoLibre CO",
+          "enabled": true,
+          "searchUrl": "https://listado.mercadolibre.com.co/{query}",
+          "queries": ["MacBook Pro M4", "MacBook Pro M5"],
+          "itemSelector": "li.ui-search-layout__item",
+          "urlContains": "mercadolibre.com.co",
+          "currency": "COP",
+          "international": false
+        }
+      ]
+    },
+    "html": [
+      {
+        "name": "Enjoy VideoGames HTTP",
+        "enabled": true,
+        "searchUrl": "https://enjoyvideogames.com.co/?s={query}&post_type=product",
+        "itemSelector": ".product.type-product",
+        "titleSelector": ".wd-entities-title",
+        "priceSelector": ".price",
+        "urlSelector": "a[href*='/product/']",
+        "currency": "COP",
+        "international": false
+      },
+      {
+        "name": "EasyMac HTTP",
+        "enabled": true,
+        "searchUrl": "https://easymac.co/?s={query}&post_type=product",
+        "itemSelector": ".product.type-product",
+        "titleSelector": ".wd-entities-title",
+        "priceSelector": ".price",
+        "urlSelector": "a[href]",
+        "currency": "COP",
+        "international": false
+      },
+      {
+        "name": "Tecnoplaza HTTP",
+        "enabled": true,
+        "searchUrl": "https://tecnoplaza.com.co/search?q={query}",
+        "itemSelector": ".product-card-wrapper",
+        "titleSelector": ".card__heading, .full-unstyled-link",
+        "priceSelector": ".price-item--sale, .price__sale, .price",
+        "urlSelector": "a[href*='/products/']",
+        "currency": "COP",
+        "international": false
+      }
+    ]
+  }
+}

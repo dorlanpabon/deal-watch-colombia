@@ -1,0 +1,35 @@
+{
+  "name": "new-project",
+  "version": "1.0.0",
+  "description": "MacBook Pro M4/M5 deal watcher for Colombia.",
+  "type": "module",
+  "main": "src/cli.js",
+  "bin": {
+    "macbook-deal-watch": "src/cli.js"
+  },
+  "scripts": {
+    "search": "node src/cli.js search",
+    "watch": "node src/cli.js watch",
+    "mercadolibre:check": "node src/mercadolibre-check.js",
+    "mercadolibre:auth-url": "node src/mercadolibre-auth.js url",
+    "mercadolibre:exchange": "node src/mercadolibre-auth.js exchange",
+    "mercadolibre:refresh": "node src/mercadolibre-auth.js refresh",
+    "mercadolibre:browser-login": "node src/mercadolibre-browser-login.js",
+    "mercadolibre:mcp-check": "node src/mercadolibre-mcp-check.js",
+    "patchright:check": "node src/patchright-check.js",
+    "patchright:install": "patchright install chromium",
+    "browser:install": "playwright install chromium",
+    "test": "node --test tests/*.test.js"
+  },
+  "keywords": [],
+  "author": "Juan Camilo Pabon <jucpabon@nequi.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@dan1d/mercadolibre-mcp": "^1.0.2",
+    "cheerio": "^1.2.0",
+    "dotenv": "^17.4.2",
+    "fast-xml-parser": "^5.7.1",
+    "patchright": "^1.59.4",
+    "playwright": "^1.59.1"
+  }
+}
