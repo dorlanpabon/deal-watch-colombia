@@ -10,13 +10,30 @@
     "MacBook Pro M5 Pro 24GB"
   ],
   "criteria": {
-    "requiredTerms": [],
+    "requiredTerms": ["macbook"],
     "minRamGb": 0,
     "preferredMinRamGb": 18,
-    "chips": ["M4", "M5"],
-    "requireMacBookPro": true,
+    "chips": [],
+    "requireMacBookPro": false,
+    "rejectMacBookAir": false,
     "rejectUnknownRam": false,
+    "strictSpecs": {
+      "minRamGb": 18,
+      "chips": ["M4", "M5"],
+      "requireMacBookPro": true,
+      "rejectMacBookAir": true,
+      "rejectUnknownRam": true
+    },
     "rejectTerms": [
+      "protector",
+      "case",
+      "carcasa",
+      "forro",
+      "hub",
+      "cargador",
+      "teclado",
+      "vidrio",
+      "display only",
       "parts only",
       "for parts",
       "cannot activate",
@@ -125,6 +142,12 @@
         "name": "Tech Street Colombia",
         "enabled": true,
         "baseUrl": "https://techstreetcol.com",
+        "hydrateProductPage": false
+      },
+      {
+        "name": "Celudmovil",
+        "enabled": true,
+        "baseUrl": "https://www.celudmovil.com.co",
         "hydrateProductPage": false
       }
     ],
@@ -309,7 +332,40 @@
         "itemSelector": "li.product",
         "titleSelector": ".woocommerce-loop-product__title",
         "priceSelector": ".price",
-        "urlSelector": "a[href]",
+        "urlSelector": "a.woocommerce-LoopProduct-link, a.woocommerce-loop-product__link",
+        "currency": "COP",
+        "international": false
+      },
+      {
+        "name": "Compudemano HTTP",
+        "enabled": true,
+        "searchUrl": "https://www.compudemano.com/?s={query}&post_type=product",
+        "itemSelector": "li.product",
+        "titleSelector": ".woocommerce-loop-product__title",
+        "priceSelector": ".price",
+        "urlSelector": "a.woocommerce-LoopProduct-link, a.woocommerce-loop-product__link",
+        "currency": "COP",
+        "international": false
+      },
+      {
+        "name": "Tienda Tek HTTP",
+        "enabled": true,
+        "searchUrl": "https://tiendatek.com.co/?s={query}&post_type=product",
+        "itemSelector": "li.product",
+        "titleSelector": ".woocommerce-loop-product__title",
+        "priceSelector": ".price",
+        "urlSelector": "a.woocommerce-LoopProduct-link, a.woocommerce-loop-product__link",
+        "currency": "COP",
+        "international": false
+      },
+      {
+        "name": "Tecnoprocesos HTTP",
+        "enabled": true,
+        "searchUrl": "https://tecnoprocesoscolombia.com/?s={query}&post_type=product",
+        "itemSelector": "li.product",
+        "titleSelector": ".woocommerce-loop-product__title",
+        "priceSelector": ".price",
+        "urlSelector": "a.woocommerce-LoopProduct-link, a.woocommerce-loop-product__link",
         "currency": "COP",
         "international": false
       },

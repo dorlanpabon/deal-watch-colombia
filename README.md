@@ -13,7 +13,7 @@ deal-watch-colombia
 - Busca productos en varias fuentes.
 - Estima costo puesto en Colombia para compras internacionales.
 - Filtra por precio maximo, precio minimo sospechoso, chip, palabras requeridas y palabras rechazadas.
-- Guarda RAM detectada cuando aparece, pero el preset Mac no descarta resultados solo por RAM.
+- Guarda RAM/chip detectados cuando aparecen, pero el preset Mac compara productos similares sin descartar por specs.
 - Guarda vistos en `data/seen.json` para alertar solo novedades en modo `watch`.
 - Alerta por consola, Telegram o Discord.
 - Exporta JSON/TXT para analizar con IA.
@@ -26,10 +26,10 @@ deal-watch-colombia
 - eBay por navegador, con importacion estimada.
 - Enjoy VideoGames, EasyMac y Tecnoplaza por HTTP.
 - iShop Colombia y Mac Center por Shopify Suggest API.
-- Tech Street Colombia por Shopify Suggest API.
+- Tech Street Colombia y Celudmovil por Shopify Suggest API.
 - Alkosto, Ktronix y Alkomprar por Algolia directo, sin cargar navegador.
 - Exito y FC Tech por API VTEX.
-- Apple Store Colombia y MacPlanet por HTTP.
+- Apple Store Colombia, MacPlanet, Compudemano, Tienda Tek y Tecnoprocesos por HTTP.
 - Falabella Colombia por Patchright.
 - iTech Colombia y TiendaTech Colombia por HTTP.
 - Patchright es el motor de navegador por defecto.
@@ -78,6 +78,8 @@ Overrides rapidos:
 
 ```powershell
 node src/cli.js search --query "MacBook Pro M5 24GB" --max-landed-cop 8500000
+node src/cli.js search --strict-specs
+node src/cli.js search --loose-specs --required-term macbook
 node src/cli.js search --guided
 node src/cli.js search --no-interactive
 node src/cli.js search --export txt
@@ -102,10 +104,11 @@ El preset MacBook esta en `config.example.json`:
   ],
   "criteria": {
     "requiredTerms": [],
+    "requiredTerms": ["macbook"],
     "minRamGb": 0,
     "preferredMinRamGb": 18,
-    "chips": ["M4", "M5"],
-    "requireMacBookPro": true,
+    "chips": [],
+    "requireMacBookPro": false,
     "rejectUnknownRam": false,
     "minLandedCop": 4500000,
     "maxLandedCop": 13000000,
@@ -123,6 +126,18 @@ Para otro producto, copia `config.example.json` y cambia:
 - `criteria.requireMacBookPro`
 - `criteria.maxLandedCop`
 - `criteria.rejectTerms`
+
+Para filtrar duro MacBook Pro M4/M5 con minimo 18 GB:
+
+```powershell
+node src/cli.js search --strict-specs
+```
+
+Para comparar similares sin rigidez de specs:
+
+```powershell
+node src/cli.js search --loose-specs --required-term macbook
+```
 
 Ejemplo generico:
 

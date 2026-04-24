@@ -42,9 +42,10 @@ test("rejects base MacBook Pro M4 when official store hides RAM", () => {
 });
 
 test("can include low or unknown RAM in relaxed analysis mode", () => {
-  const relaxed = { ...criteria, minRamGb: 0, rejectUnknownRam: false };
+  const relaxed = { ...criteria, minRamGb: 0, rejectUnknownRam: false, requireMacBookPro: false, rejectMacBookAir: false, chips: [] };
   assert.equal(matchesCriteria({ title: "MacBook Pro M4 16GB 512GB" }, relaxed).ok, true);
   assert.equal(matchesCriteria({ title: "MacBook Pro de 14 pulgadas: Chip M4 de Apple, 512 GB SSD" }, relaxed).ok, true);
+  assert.equal(matchesCriteria({ title: "MacBook Air M4 16GB 512GB" }, relaxed).ok, true);
 });
 
 test("rejects broken listings", () => {

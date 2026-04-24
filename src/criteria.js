@@ -29,7 +29,7 @@ export function matchesCriteria(listing, criteria) {
     if (!normalized.includes(normalizeText(term))) reasons.push("required_term");
   }
   if (criteria.requireMacBookPro && !info.isMacBookPro) reasons.push("not_macbook_pro");
-  if (info.isMacBookAir) reasons.push("macbook_air");
+  if ((criteria.rejectMacBookAir ?? criteria.requireMacBookPro) && info.isMacBookAir) reasons.push("macbook_air");
   if ((criteria.chips ?? []).length > 0 && (!info.chip || !criteria.chips.includes(info.chip))) reasons.push("chip");
   if (criteria.minRamGb && info.ramGb === null && criteria.rejectUnknownRam) reasons.push("ram_unknown");
   if (criteria.minRamGb && info.ramGb !== null && info.ramGb < criteria.minRamGb) reasons.push("ram_low");

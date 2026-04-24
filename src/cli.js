@@ -43,8 +43,11 @@ function parseArgs(args) {
 }
 
 function applyCliOptions(config, options) {
+  if (options.strictSpecs) applyStrictSpecs(config);
+  if (options.looseSpecs) applyLooseSpecs(config);
   if (options.queries?.length) config.queries = options.queries;
   if (options.minRamGb) config.criteria.minRamGb = Number(options.minRamGb);
+  if (options.preferredMinRamGb) config.criteria.preferredMinRamGb = Number(options.preferredMinRamGb);
   if (options.maxLandedCop) config.criteria.maxLandedCop = Number(options.maxLandedCop);
   if (options.minLandedCop) config.criteria.minLandedCop = Number(options.minLandedCop);
   if (options.greatDealCop) config.criteria.greatDealCop = Number(options.greatDealCop);
@@ -62,11 +65,12 @@ function applyCliOptions(config, options) {
   if (Object.hasOwn(options, "chips")) {
     config.criteria.chips = String(options.chips ?? "").split(",").map((chip) => chip.trim()).filter(Boolean);
   }
-  if (options.requiredTerm) {
+  if (Object.hasOwn(options, "requiredTerm")) {
     config.criteria.requiredTerms = String(options.requiredTerm).split(",").map((term) => term.trim()).filter(Boolean);
   }
   if (Object.hasOwn(options, "rejectUnknownRam")) config.criteria.rejectUnknownRam = toBoolean(options.rejectUnknownRam);
   if (Object.hasOwn(options, "requireMacBookPro")) config.criteria.requireMacBookPro = toBoolean(options.requireMacBookPro);
+  if (Object.hasOwn(options, "rejectMacBookAir")) config.criteria.rejectMacBookAir = toBoolean(options.rejectMacBookAir);
   if (options.intervalMinutes) config.watch.intervalMinutes = Number(options.intervalMinutes);
   return config;
 }
@@ -105,9 +109,12 @@ function shouldPromptSearch(options) {
     "minLandedCop",
     "greatDealCop",
     "chips",
+    "strictSpecs",
+    "looseSpecs",
     "requiredTerm",
     "rejectUnknownRam",
-    "requireMacBookPro"
+    "requireMacBookPro",
+    "rejectMacBookAir"
   ].some((key) => Object.hasOwn(options, key));
 }
 
@@ -127,4 +134,21 @@ function formatCop(value) {
 
 function toBoolean(value) {
   return !["false", "0", "no"].includes(String(value).toLowerCase());
+}
+
+function applyStrictSpecs(config) {
+  const strict = config.criteria.strictSpecs ?? {};
+  if (Object.hasOwn(strict, "minRamGb")) config.criteria.minRamGb = strict.minRamGb;
+  if (Object.hasOwn(strict, "chips")) config.criteria.chips = strict.chips;
+  if (Object.hasOwn(strict, "requireMacBookPro")) config.criteria.requireMacBookPro = strict.requireMacBookPro;
+  if (Object.hasOwn(strict, "rejectUnknownRam")) config.criteria.rejectUnknownRam = strict.rejectUnknownRam;
+  if (Object.hasOwn(strict, "rejectMacBookAir")) config.criteria.rejectMacBookAir = strict.rejectMacBookAir;
+}
+
+function applyLooseSpecs(config) {
+  config.criteria.minRamGb = 0;
+  config.criteria.chips = [];
+  config.criteria.requireMacBookPro = false;
+  config.criteria.rejectUnknownRam = false;
+  config.criteria.rejectMacBookAir = false;
 }
