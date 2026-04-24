@@ -1,0 +1,25 @@
+{
+  "profile": "iphone-16-pro-max-colombia",
+  "queries": [
+    "iPhone 16 Pro Max 256GB",
+    "iPhone 16 Pro Max 512GB"
+  ],
+  "criteria": {
+    "requiredTerms": ["iphone", "16", "pro max"],
+    "minRamGb": 0,
+    "chips": [],
+    "requireMacBookPro": false,
+    "rejectUnknownRam": false,
+    "rejectTerms": [
+      "repuestos",
+      "parts",
+      "bloqueado",
+      "icloud",
+      "display roto",
+      "pantalla rota"
+    ],
+    "minLandedCop": 1000000,
+    "maxLandedCop": 6500000,
+    "greatDealCop": 5200000
+  }
+}

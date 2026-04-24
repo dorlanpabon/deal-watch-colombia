@@ -1,10 +1,12 @@
 {
-  "name": "new-project",
+  "name": "deal-watch-colombia",
   "version": "1.0.0",
-  "description": "MacBook Pro M4/M5 deal watcher for Colombia.",
+  "description": "Configurable deal watcher for Colombian stores, marketplaces, and import prices.",
   "type": "module",
   "main": "src/cli.js",
   "bin": {
+    "deal-watch-colombia": "src/cli.js",
+    "deal-watch": "src/cli.js",
     "macbook-deal-watch": "src/cli.js"
   },
   "scripts": {
@@ -21,8 +23,15 @@
     "browser:install": "playwright install chromium",
     "test": "node --test tests/*.test.js"
   },
-  "keywords": [],
-  "author": "Juan Camilo Pabon <jucpabon@nequi.com>",
+  "keywords": [
+    "colombia",
+    "deals",
+    "price-tracker",
+    "mercadolibre",
+    "playwright",
+    "patchright"
+  ],
+  "author": "Juan Camilo Pabon",
   "license": "MIT",
   "dependencies": {
     "@dan1d/mercadolibre-mcp": "^1.0.2",

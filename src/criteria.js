@@ -20,11 +20,14 @@ export function matchesCriteria(listing, criteria) {
   const info = inspectListing(normalized);
   const reasons = [];
 
+  for (const term of criteria.requiredTerms ?? []) {
+    if (!normalized.includes(normalizeText(term))) reasons.push("required_term");
+  }
   if (criteria.requireMacBookPro && !info.isMacBookPro) reasons.push("not_macbook_pro");
   if (info.isMacBookAir) reasons.push("macbook_air");
-  if (!info.chip || !criteria.chips.includes(info.chip)) reasons.push("chip");
-  if (info.ramGb === null && criteria.rejectUnknownRam) reasons.push("ram_unknown");
-  if (info.ramGb !== null && info.ramGb < criteria.minRamGb) reasons.push("ram_low");
+  if ((criteria.chips ?? []).length > 0 && (!info.chip || !criteria.chips.includes(info.chip))) reasons.push("chip");
+  if (criteria.minRamGb && info.ramGb === null && criteria.rejectUnknownRam) reasons.push("ram_unknown");
+  if (criteria.minRamGb && info.ramGb !== null && info.ramGb < criteria.minRamGb) reasons.push("ram_low");
   if ((criteria.rejectTerms ?? []).some((term) => normalized.includes(normalizeText(term)))) {
     reasons.push("reject_term");
   }

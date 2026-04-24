@@ -40,3 +40,18 @@ test("rejects empty boxes", () => {
   assert.equal(result.ok, false);
   assert.ok(result.reasons.includes("reject_term"));
 });
+
+test("supports generic product criteria", () => {
+  const result = matchesCriteria(
+    { title: "iPhone 16 Pro Max 256GB" },
+    {
+      requiredTerms: ["iphone", "16"],
+      chips: [],
+      minRamGb: 0,
+      requireMacBookPro: false,
+      rejectUnknownRam: false,
+      rejectTerms: []
+    }
+  );
+  assert.equal(result.ok, true);
+});

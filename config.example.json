@@ -1,4 +1,5 @@
 {
+  "profile": "macbook-pro-m4-m5-colombia",
   "country": "CO",
   "currency": "COP",
   "queries": [
@@ -9,6 +10,7 @@
     "MacBook Pro M5 Pro 24GB"
   ],
   "criteria": {
+    "requiredTerms": [],
     "minRamGb": 18,
     "chips": ["M4", "M5"],
     "requireMacBookPro": true,
@@ -49,7 +51,7 @@
   },
   "sources": {
     "mercadolibre": {
-      "enabled": true
+      "enabled": false
     },
     "mercadolibreMcp": {
       "enabled": false,
