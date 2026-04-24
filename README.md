@@ -1,6 +1,6 @@
 # Deal Watch Colombia
 
-Watcher configurable para encontrar ofertas reales en tiendas y marketplaces usados desde Colombia. El preset por defecto busca MacBook Pro M4/M5 con minimo 18 GB de RAM, pero las busquedas, filtros, fuentes y umbrales viven en `config.json`.
+Watcher configurable para encontrar ofertas reales en tiendas y marketplaces usados desde Colombia. El preset por defecto compara MacBook y productos similares por precio; los filtros estrictos de chip/RAM/modelo se activan con `--strict-specs`.
 
 Nombre sugerido para el repo publico:
 
@@ -25,10 +25,11 @@ deal-watch-colombia
 - MercadoLibre API y `@dan1d/mercadolibre-mcp` como fuentes separadas de diagnostico.
 - eBay por navegador, con importacion estimada.
 - Enjoy VideoGames, EasyMac y Tecnoplaza por HTTP.
-- iShop Colombia y Mac Center por Shopify Suggest API.
-- Tech Street Colombia y Celudmovil por Shopify Suggest API.
+- iShop Colombia, Mac Center, Tech Street Colombia, Celudmovil y Musical Boutique por Shopify Suggest API.
 - Alkosto, Ktronix y Alkomprar por Algolia directo, sin cargar navegador.
 - Exito y FC Tech por API VTEX.
+- Compudemano, Enjoy VideoGames, EasyMac, MacPlanet, Pladani, Conectamos, Tienda Sales TS, ThaniaCel, Megatienda Virtual 77, Tienda Tek, Tecnoprocesos, iTech Colombia, TiendaTech Colombia, TeCo Market y DH Store por WooCommerce Store API.
+- Colombian Mac Store por JSON-LD para usados con precio.
 - Apple Store Colombia, MacPlanet, Compudemano, Tienda Tek y Tecnoprocesos por HTTP.
 - Falabella Colombia por Patchright.
 - iTech Colombia y TiendaTech Colombia por HTTP.

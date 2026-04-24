@@ -34,6 +34,21 @@
       "teclado",
       "vidrio",
       "display only",
+      "adaptador de corriente",
+      "adaptador usb",
+      "bateria para macbook",
+      "battery for macbook",
+      "cable de carga",
+      "dock",
+      "maletin",
+      "morral",
+      "bolso",
+      "base vertical",
+      "soporte base",
+      "pantalla para macbook",
+      "display lcd",
+      "repuesto",
+      "repuestos",
       "parts only",
       "for parts",
       "cannot activate",
@@ -118,6 +133,125 @@
         "currency": "COP"
       }
     ],
+    "woocommerce": [
+      {
+        "name": "Compudemano Woo",
+        "enabled": true,
+        "baseUrl": "https://www.compudemano.com",
+        "currency": "COP",
+        "condition": "new"
+      },
+      {
+        "name": "Enjoy VideoGames Woo",
+        "enabled": true,
+        "baseUrl": "https://enjoyvideogames.com.co",
+        "currency": "COP",
+        "condition": "new"
+      },
+      {
+        "name": "EasyMac Woo",
+        "enabled": true,
+        "baseUrl": "https://easymac.co",
+        "currency": "COP",
+        "condition": "new"
+      },
+      {
+        "name": "MacPlanet Woo",
+        "enabled": true,
+        "baseUrl": "https://macplanet.com.co",
+        "currency": "COP",
+        "condition": "used"
+      },
+      {
+        "name": "Pladani Woo",
+        "enabled": true,
+        "baseUrl": "https://pladani.com",
+        "currency": "COP",
+        "condition": "new"
+      },
+      {
+        "name": "Conectamos Woo",
+        "enabled": true,
+        "baseUrl": "https://conectamos.shop",
+        "currency": "COP",
+        "condition": "new"
+      },
+      {
+        "name": "Tienda Sales TS Woo",
+        "enabled": true,
+        "baseUrl": "https://www.tiendasalests.com",
+        "currency": "COP",
+        "condition": "used"
+      },
+      {
+        "name": "ThaniaCel Woo",
+        "enabled": true,
+        "baseUrl": "https://thaniacel.com",
+        "currency": "COP",
+        "condition": "new"
+      },
+      {
+        "name": "Megatienda Virtual 77 Woo",
+        "enabled": true,
+        "baseUrl": "https://megatiendavirtual77.com",
+        "currency": "COP",
+        "condition": "new"
+      },
+      {
+        "name": "Tienda Tek Woo",
+        "enabled": true,
+        "baseUrl": "https://tiendatek.com.co",
+        "currency": "COP",
+        "condition": "new"
+      },
+      {
+        "name": "Tecnoprocesos Woo",
+        "enabled": true,
+        "baseUrl": "https://tecnoprocesoscolombia.com",
+        "currency": "COP",
+        "condition": "new"
+      },
+      {
+        "name": "iTech Colombia Woo",
+        "enabled": true,
+        "baseUrl": "https://itechcolombia.co",
+        "currency": "COP",
+        "condition": "new"
+      },
+      {
+        "name": "TiendaTech Colombia Woo",
+        "enabled": true,
+        "baseUrl": "https://tiendatechcolombia.com",
+        "currency": "COP",
+        "condition": "new"
+      },
+      {
+        "name": "TeCo Market Woo",
+        "enabled": true,
+        "baseUrl": "https://www.computadoresenbogota.com",
+        "currency": "COP",
+        "condition": "used"
+      },
+      {
+        "name": "DH Store Woo",
+        "enabled": true,
+        "baseUrl": "https://dhstore.com.co",
+        "currency": "COP",
+        "condition": "unknown"
+      }
+    ],
+    "jsonLdProducts": [
+      {
+        "name": "Colombian Mac Store Used",
+        "enabled": true,
+        "baseUrl": "https://www.colombianmacstore.com.co",
+        "listUrl": "https://www.colombianmacstore.com.co/computadoras-apple/mac-usadas/comprar-macbook-de-segunda-mano.html",
+        "currency": "COP",
+        "condition": "used",
+        "limit": 20,
+        "requestDelayMs": 150
+      }
+    ],
     "mercadolibre": {
       "enabled": false
     },
@@ -148,6 +282,12 @@
         "name": "Celudmovil",
         "enabled": true,
         "baseUrl": "https://www.celudmovil.com.co",
+        "hydrateProductPage": false
+      },
+      {
+        "name": "Musical Boutique",
+        "enabled": true,
+        "baseUrl": "https://musicalboutique.co",
         "hydrateProductPage": false
       }
     ],

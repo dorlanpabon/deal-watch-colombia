@@ -7,11 +7,13 @@ import { searchAlgoliaSources } from "./sources/algolia.js";
 import { searchBrowserSources } from "./sources/browser.js";
 import { searchEbayRss } from "./sources/ebay-rss.js";
 import { searchHtmlSources } from "./sources/html.js";
+import { searchJsonLdProductSources } from "./sources/jsonld-products.js";
 import { searchMercadoLibre } from "./sources/mercadolibre.js";
 import { searchMercadoLibreMcp } from "./sources/mercadolibre-mcp.js";
 import { searchPatchrightBrowserSources } from "./sources/patchright-browser.js";
 import { searchShopifySuggestSources } from "./sources/shopify-suggest.js";
 import { searchVtexSources } from "./sources/vtex.js";
+import { searchWooCommerceSources } from "./sources/woocommerce.js";
 
 export async function searchOnce(config, { onlyNew = false } = {}) {
   const usdToCop = await getUsdToCop(config);
@@ -46,6 +48,8 @@ async function collectListings(config) {
   const tasks = [];
   tasks.push(searchAlgoliaSources(config.queries, config));
   tasks.push(searchVtexSources(config.queries, config));
+  tasks.push(searchWooCommerceSources(config.queries, config));
+  tasks.push(searchJsonLdProductSources(config.queries, config));
   if (config.sources.browser?.enabled) tasks.push(searchBrowserSources(config.queries, config));
   if (config.sources.patchrightBrowser?.enabled) tasks.push(searchPatchrightBrowserSources(config.queries, config));
   tasks.push(searchShopifySuggestSources(config.queries, config));
