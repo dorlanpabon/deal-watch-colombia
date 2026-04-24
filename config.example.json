@@ -11,10 +11,11 @@
   ],
   "criteria": {
     "requiredTerms": [],
-    "minRamGb": 18,
+    "minRamGb": 0,
+    "preferredMinRamGb": 18,
     "chips": ["M4", "M5"],
     "requireMacBookPro": true,
-    "rejectUnknownRam": true,
+    "rejectUnknownRam": false,
     "rejectTerms": [
       "parts only",
       "for parts",
@@ -32,8 +33,8 @@
       "bloqueado"
     ],
     "minLandedCop": 4500000,
-    "maxLandedCop": 8500000,
-    "greatDealCop": 7200000,
+    "maxLandedCop": 13000000,
+    "greatDealCop": 8500000,
     "minSellerFeedback": 50,
     "minSellerPositivePct": 97
   },
@@ -49,7 +50,57 @@
     "intervalMinutes": 15,
     "maxResultsPerSource": 50
   },
+  "output": {
+    "enabled": false,
+    "formats": ["txt"],
+    "dir": "data/exports"
+  },
   "sources": {
+    "algolia": [
+      {
+        "name": "Ktronix Algolia",
+        "enabled": true,
+        "appId": "QX5IPS1B1Q",
+        "apiKey": "7a8800d62203ee3a9ff1cdf74f99b268",
+        "indexName": "ktronixIndexAlgoliaPRD",
+        "baseUrl": "https://www.ktronix.com",
+        "currency": "COP"
+      },
+      {
+        "name": "Alkosto Algolia",
+        "enabled": true,
+        "appId": "QX5IPS1B1Q",
+        "apiKey": "7a8800d62203ee3a9ff1cdf74f99b268",
+        "indexName": "alkostoIndexAlgoliaPRD",
+        "baseUrl": "https://www.alkosto.com",
+        "currency": "COP"
+      },
+      {
+        "name": "Alkomprar Algolia",
+        "enabled": true,
+        "appId": "QX5IPS1B1Q",
+        "apiKey": "7a8800d62203ee3a9ff1cdf74f99b268",
+        "indexName": "alkomprarIndexAlgoliaPRD",
+        "baseUrl": "https://www.alkomprar.com",
+        "currency": "COP"
+      }
+    ],
+    "vtex": [
+      {
+        "name": "Exito VTEX",
+        "enabled": true,
+        "searchUrl": "https://www.exito.com/api/catalog_system/pub/products/search?ft={query}",
+        "baseUrl": "https://www.exito.com",
+        "currency": "COP"
+      },
+      {
+        "name": "FC Tech VTEX",
+        "enabled": true,
+        "searchUrl": "https://www.fctechstore.co/api/catalog_system/pub/products/search?ft={query}",
+        "baseUrl": "https://www.fctechstore.co",
+        "currency": "COP"
+      }
+    ],
     "mercadolibre": {
       "enabled": false
     },
@@ -61,12 +112,20 @@
       {
         "name": "iShop Colombia",
         "enabled": true,
-        "baseUrl": "https://co.tiendasishop.com"
+        "baseUrl": "https://co.tiendasishop.com",
+        "hydrateProductPage": true
       },
       {
         "name": "Mac Center",
         "enabled": true,
-        "baseUrl": "https://www.mac-center.com"
+        "baseUrl": "https://www.mac-center.com",
+        "hydrateProductPage": true
+      },
+      {
+        "name": "Tech Street Colombia",
+        "enabled": true,
+        "baseUrl": "https://techstreetcol.com",
+        "hydrateProductPage": false
       }
     ],
     "ebayRss": {
@@ -79,7 +138,8 @@
       "headless": true,
       "userDataDir": "data/browser-profile",
       "waitMs": 1200,
-      "blockResources": ["image", "media", "font"],
+      "blockResources": ["image", "media", "font", "stylesheet"],
+      "blockExtensions": [".css", ".jpg", ".jpeg", ".png", ".webp", ".avif", ".gif", ".svg", ".ico", ".woff", ".woff2", ".ttf", ".mp4", ".webm"],
       "blockUrlPatterns": [
         "googletagmanager",
         "google-analytics",
@@ -104,6 +164,28 @@
           "queries": ["MacBook Pro M4", "MacBook Pro M5"],
           "itemSelector": ".product.type-product",
           "urlContains": "/product/",
+          "currency": "COP",
+          "international": false
+        },
+        {
+          "name": "iShop Colombia Browser",
+          "enabled": true,
+          "searchUrl": "https://co.tiendasishop.com/search?q={query}",
+          "queries": ["MacBook Pro M4 Pro", "MacBook Pro M4 Max", "MacBook Pro M5 Pro"],
+          "itemSelector": "li.grid__item",
+          "urlContains": "/products/",
+          "baseUrl": "https://co.tiendasishop.com",
+          "currency": "COP",
+          "international": false
+        },
+        {
+          "name": "Mac Center Browser",
+          "enabled": true,
+          "searchUrl": "https://www.mac-center.com/search?q={query}",
+          "queries": ["MacBook Pro M4 Pro", "MacBook Pro M4 Max", "MacBook Pro M5 Pro"],
+          "itemSelector": "li.grid__item",
+          "urlContains": "/products/",
+          "baseUrl": "https://www.mac-center.com",
           "currency": "COP",
           "international": false
         },
@@ -138,7 +220,7 @@
         },
         {
           "name": "Alkosto",
-          "enabled": true,
+          "enabled": false,
           "searchUrl": "https://www.alkosto.com/search?text={query}",
           "queries": ["MacBook Pro M4", "MacBook Pro M5"],
           "itemSelector": ".js-product-item",
@@ -148,7 +230,7 @@
         },
         {
           "name": "Ktronix",
-          "enabled": true,
+          "enabled": false,
           "searchUrl": "https://www.ktronix.com/search?text={query}",
           "queries": ["MacBook Pro M4", "MacBook Pro M5"],
           "itemSelector": ".js-product-item",
@@ -174,7 +256,8 @@
       "userDataDir": "data/patchright-profile",
       "sourcePrefix": "Patchright",
       "waitMs": 1200,
-      "blockResources": ["image", "media", "font"],
+      "blockResources": ["image", "media", "font", "stylesheet"],
+      "blockExtensions": [".css", ".jpg", ".jpeg", ".png", ".webp", ".avif", ".gif", ".svg", ".ico", ".woff", ".woff2", ".ttf", ".mp4", ".webm"],
       "blockUrlPatterns": [
         "googletagmanager",
         "google-analytics",
@@ -209,6 +292,28 @@
         "international": false
       },
       {
+        "name": "Apple Store Colombia HTTP",
+        "enabled": true,
+        "searchUrl": "https://www.applestorecolombia.co/category/macbook-pro",
+        "itemSelector": "[data-hook='product-item-root']",
+        "titleSelector": "h2",
+        "priceSelector": "[data-hook='product-item-price-to-pay'], [data-wix-price]",
+        "urlSelector": "a[data-hook='product-item-container']",
+        "currency": "COP",
+        "international": false
+      },
+      {
+        "name": "MacPlanet HTTP",
+        "enabled": true,
+        "searchUrl": "https://macplanet.com.co/shop/?s={query}&post_type=product",
+        "itemSelector": "li.product",
+        "titleSelector": ".woocommerce-loop-product__title",
+        "priceSelector": ".price",
+        "urlSelector": "a[href]",
+        "currency": "COP",
+        "international": false
+      },
+      {
         "name": "EasyMac HTTP",
         "enabled": true,
         "searchUrl": "https://easymac.co/?s={query}&post_type=product",
@@ -227,6 +332,28 @@
         "titleSelector": ".card__heading, .full-unstyled-link",
         "priceSelector": ".price-item--sale, .price__sale, .price",
         "urlSelector": "a[href*='/products/']",
+        "currency": "COP",
+        "international": false
+      },
+      {
+        "name": "iTech Colombia HTTP",
+        "enabled": true,
+        "searchUrl": "https://itechcolombia.co/?s={query}&post_type=product",
+        "itemSelector": "li.product",
+        "titleSelector": ".woocommerce-loop-product__title",
+        "priceSelector": ".price",
+        "urlSelector": "a[href]",
+        "currency": "COP",
+        "international": false
+      },
+      {
+        "name": "TiendaTech Colombia HTTP",
+        "enabled": true,
+        "searchUrl": "https://tiendatechcolombia.com/?s={query}&post_type=product",
+        "itemSelector": "li.product",
+        "titleSelector": ".woocommerce-loop-product__title",
+        "priceSelector": ".price",
+        "urlSelector": "a[href]",
         "currency": "COP",
         "international": false
       }

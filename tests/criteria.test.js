@@ -29,6 +29,24 @@ test("rejects low RAM", () => {
   assert.ok(result.reasons.includes("ram_low"));
 });
 
+test("accepts MacBook Pro M4 Pro when official store hides RAM", () => {
+  const result = matchesCriteria({ title: "MacBook Pro de 14 pulgadas: Chip M4 Pro de Apple, 512 GB SSD" }, criteria);
+  assert.equal(result.ok, true);
+  assert.equal(result.specs.ramGb, 24);
+});
+
+test("rejects base MacBook Pro M4 when official store hides RAM", () => {
+  const result = matchesCriteria({ title: "MacBook Pro de 14 pulgadas: Chip M4 de Apple, 512 GB SSD" }, criteria);
+  assert.equal(result.ok, false);
+  assert.ok(result.reasons.includes("ram_unknown"));
+});
+
+test("can include low or unknown RAM in relaxed analysis mode", () => {
+  const relaxed = { ...criteria, minRamGb: 0, rejectUnknownRam: false };
+  assert.equal(matchesCriteria({ title: "MacBook Pro M4 16GB 512GB" }, relaxed).ok, true);
+  assert.equal(matchesCriteria({ title: "MacBook Pro de 14 pulgadas: Chip M4 de Apple, 512 GB SSD" }, relaxed).ok, true);
+});
+
 test("rejects broken listings", () => {
   const result = matchesCriteria({ title: "MacBook Pro M4 24GB parts only" }, criteria);
   assert.equal(result.ok, false);

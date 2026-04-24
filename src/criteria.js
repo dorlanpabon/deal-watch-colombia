@@ -1,4 +1,4 @@
-const CHIP_RE = /\bM([45])(?:\s*(?:PRO|MAX|ULTRA))?\b/i;
+const CHIP_RE = /\bM([45])(?:\s*(PRO|MAX|ULTRA))?\b/i;
 const RAM_RE = /\b(8|16|18|24|32|36|48|64|96|128)\s*(?:GB|G)\b/i;
 
 export function inspectListing(text) {
@@ -6,11 +6,16 @@ export function inspectListing(text) {
   const ramMatch = normalized.match(RAM_RE);
   const chipMatch = normalized.match(CHIP_RE);
 
+  const isMacBookPro = /\bMACBOOK\s+PRO\b/.test(normalized);
+  const chipTier = chipMatch?.[2]?.toUpperCase() ?? null;
+  const ramGb = ramMatch ? Number(ramMatch[1]) : inferMacBookProRam(isMacBookPro, chipTier);
+
   return {
-    isMacBookPro: /\bMACBOOK\s+PRO\b/.test(normalized),
+    isMacBookPro,
     isMacBookAir: /\bMACBOOK\s+AIR\b/.test(normalized),
     chip: chipMatch ? `M${chipMatch[1]}` : null,
-    ramGb: ramMatch ? Number(ramMatch[1]) : null
+    chipTier,
+    ramGb
   };
 }
 
@@ -46,4 +51,11 @@ export function normalizeText(value) {
     .replace(/\s+/g, " ")
     .trim()
     .toUpperCase();
+}
+
+function inferMacBookProRam(isMacBookPro, chipTier) {
+  if (!isMacBookPro) return null;
+  if (chipTier === "PRO") return 24;
+  if (chipTier === "MAX") return 36;
+  return null;
 }

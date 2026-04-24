@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { chromium } from "playwright";
+import { chromium } from "patchright";
 import { loadConfig } from "./config.js";
 
 const config = await loadConfig();

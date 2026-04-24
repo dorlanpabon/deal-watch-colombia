@@ -1,7 +1,9 @@
 import { alertDeals } from "./alerts.js";
 import { matchesCriteria } from "./criteria.js";
 import { estimateLandedCop, getUsdToCop } from "./costs.js";
+import { exportDeals } from "./exports.js";
 import { appendDeals, loadSeen, saveSeen } from "./persistence.js";
+import { searchAlgoliaSources } from "./sources/algolia.js";
 import { searchBrowserSources } from "./sources/browser.js";
 import { searchEbayRss } from "./sources/ebay-rss.js";
 import { searchHtmlSources } from "./sources/html.js";
@@ -9,6 +11,7 @@ import { searchMercadoLibre } from "./sources/mercadolibre.js";
 import { searchMercadoLibreMcp } from "./sources/mercadolibre-mcp.js";
 import { searchPatchrightBrowserSources } from "./sources/patchright-browser.js";
 import { searchShopifySuggestSources } from "./sources/shopify-suggest.js";
+import { searchVtexSources } from "./sources/vtex.js";
 
 export async function searchOnce(config, { onlyNew = false } = {}) {
   const usdToCop = await getUsdToCop(config);
@@ -27,6 +30,7 @@ export async function searchOnce(config, { onlyNew = false } = {}) {
   if (onlyNew) await saveSeen(seen);
   await appendDeals(deals);
   await alertDeals(deals);
+  await exportDeals(deals, config);
 
   return deals;
 }
@@ -40,14 +44,16 @@ export async function watch(config) {
 
 async function collectListings(config) {
   const tasks = [];
+  tasks.push(searchAlgoliaSources(config.queries, config));
+  tasks.push(searchVtexSources(config.queries, config));
   if (config.sources.browser?.enabled) tasks.push(searchBrowserSources(config.queries, config));
   if (config.sources.patchrightBrowser?.enabled) tasks.push(searchPatchrightBrowserSources(config.queries, config));
+  tasks.push(searchShopifySuggestSources(config.queries, config));
 
   for (const query of config.queries) {
     if (config.sources.mercadolibre.enabled) tasks.push(searchMercadoLibre(query, config));
     if (config.sources.mercadolibreMcp?.enabled) tasks.push(searchMercadoLibreMcp(query, config));
     if (config.sources.ebayRss.enabled) tasks.push(searchEbayRss(query, config));
-    tasks.push(searchShopifySuggestSources(query, config));
     tasks.push(searchHtmlSources(query, config));
   }
 

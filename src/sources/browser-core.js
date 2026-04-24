@@ -31,7 +31,7 @@ export async function searchBrowserSourcesWithEngine(chromium, queries, config, 
 
 async function createBrowserContext(chromium, browserConfig) {
   const launchOptions = { headless: browserConfig.headless };
-  const contextOptions = { locale: "es-CO" };
+  const contextOptions = { locale: "es-CO", serviceWorkers: "block" };
 
   if (browserConfig.userDataDir) {
     const context = await chromium.launchPersistentContext(browserConfig.userDataDir, {
@@ -47,15 +47,16 @@ async function createBrowserContext(chromium, browserConfig) {
 }
 
 async function installResourceBlocking(context, browserConfig) {
-  const resourceTypes = new Set(browserConfig.blockResources ?? []);
+  const resourceTypes = new Set(browserConfig.blockResources ?? defaultBlockedResourceTypes());
   const urlParts = (browserConfig.blockUrlPatterns ?? []).map((part) => part.toLowerCase());
-  if (resourceTypes.size === 0 && urlParts.length === 0) return;
+  const extensions = browserConfig.blockExtensions ?? defaultBlockedExtensions();
 
   await context.route("**/*", async (route) => {
     const request = route.request();
     const url = request.url().toLowerCase();
     const shouldBlock = resourceTypes.has(request.resourceType())
-      || urlParts.some((part) => url.includes(part));
+      || urlParts.some((part) => url.includes(part))
+      || extensions.some((extension) => urlPath(url).endsWith(extension));
 
     if (shouldBlock) {
       await route.abort().catch(() => {});
@@ -64,6 +65,22 @@ async function installResourceBlocking(context, browserConfig) {
 
     await route.continue().catch(() => {});
   });
+}
+
+function defaultBlockedResourceTypes() {
+  return ["image", "media", "font", "stylesheet"];
+}
+
+function defaultBlockedExtensions() {
+  return [".css", ".jpg", ".jpeg", ".png", ".webp", ".avif", ".gif", ".svg", ".ico", ".woff", ".woff2", ".ttf", ".mp4", ".webm"];
+}
+
+function urlPath(url) {
+  try {
+    return new URL(url).pathname.toLowerCase();
+  } catch {
+    return url;
+  }
 }
 
 async function searchBrowserSource(page, source, query, config, browserConfig) {
@@ -85,12 +102,16 @@ async function evaluateItems(page, source) {
       return await page.locator(source.itemSelector).evaluateAll((nodes, source) => {
         return nodes.map((node) => {
           const text = node.innerText || "";
-          const anchors = node.tagName === "A" ? [node, ...node.querySelectorAll("a")] : [...node.querySelectorAll("a")];
+          const title = source.titleSelector ? node.querySelector(source.titleSelector)?.innerText?.trim() ?? "" : "";
+          const priceText = source.priceSelector ? node.querySelector(source.priceSelector)?.innerText?.trim() ?? "" : "";
+          const anchors = source.urlSelector
+            ? [...node.querySelectorAll(source.urlSelector)]
+            : node.tagName === "A" ? [node, ...node.querySelectorAll("a")] : [...node.querySelectorAll("a")];
           const href = anchors
             .map((anchor) => anchor.href)
             .find((candidate) => !source.urlContains || candidate.includes(source.urlContains)) || "";
 
-          return { text, href };
+          return { text, href, title, priceText };
         });
       }, source);
     } catch (err) {
@@ -103,8 +124,8 @@ async function evaluateItems(page, source) {
 
 function toListing(item, source, index, browserConfig) {
   const lines = item.text.split("\n").map((line) => line.trim()).filter(Boolean);
-  const title = lines.find((line) => /macbook/i.test(line) && !/shop on ebay/i.test(line)) ?? "";
-  const moneyLine = findMoneyLine(lines);
+  const title = item.title || lines.find((line) => /macbook/i.test(line) && !/shop on ebay/i.test(line)) || firstTitleLine(lines);
+  const moneyLine = item.priceText || findMoneyLine(lines);
   const shippingLine = lines.find((line) => /shipping|env/i.test(line)) ?? "";
   const condition = lines.find((line) => (
     !/macbook/i.test(line)
@@ -120,7 +141,7 @@ function toListing(item, source, index, browserConfig) {
     id: `${sourceName}:${item.href || index}`,
     title,
     description: item.text,
-    url: cleanUrl(item.href),
+    url: cleanUrl(item.href, source.baseUrl),
     price: price.amount,
     currency: source.currency ?? price.currency,
     condition,
@@ -128,6 +149,14 @@ function toListing(item, source, index, browserConfig) {
     shippingCop,
     international: Boolean(source.international)
   };
+}
+
+function firstTitleLine(lines) {
+  return lines.find((line) => (
+    line.length >= 8
+    && !/(?:COP\s*)?\$\s*[0-9]/i.test(line)
+    && !/cookie|privacidad|comprar|agregar|carrito|ordenar por|filtrar/i.test(line)
+  )) ?? "";
 }
 
 function findMoneyLine(lines) {
@@ -195,9 +224,9 @@ function parseLocaleNumber(value) {
   return Number(raw.replaceAll(",", "").replaceAll(".", ""));
 }
 
-function cleanUrl(url) {
+function cleanUrl(url, baseUrl) {
   try {
-    const parsed = new URL(url);
+    const parsed = new URL(url, baseUrl);
     return `${parsed.origin}${parsed.pathname}`;
   } catch {
     return url;

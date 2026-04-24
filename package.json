@@ -20,7 +20,7 @@
     "mercadolibre:mcp-check": "node src/mercadolibre-mcp-check.js",
     "patchright:check": "node src/patchright-check.js",
     "patchright:install": "patchright install chromium",
-    "browser:install": "playwright install chromium",
+    "browser:install": "patchright install chromium",
     "test": "node --test tests/*.test.js"
   },
   "keywords": [
@@ -28,7 +28,6 @@
     "deals",
     "price-tracker",
     "mercadolibre",
-    "playwright",
     "patchright"
   ],
   "author": "Juan Camilo Pabon",
@@ -38,7 +37,6 @@
     "cheerio": "^1.2.0",
     "dotenv": "^17.4.2",
     "fast-xml-parser": "^5.7.1",
-    "patchright": "^1.59.4",
-    "playwright": "^1.59.1"
+    "patchright": "^1.59.4"
   }
 }

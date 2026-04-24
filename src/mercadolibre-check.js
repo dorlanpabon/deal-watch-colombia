@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import "dotenv/config";
-import { chromium } from "playwright";
+import { chromium } from "patchright";
 import { loadConfig } from "./config.js";
 import { searchMercadoLibre } from "./sources/mercadolibre.js";
 
