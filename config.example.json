@@ -299,6 +299,7 @@
     "browser": {
       "enabled": true,
       "headless": true,
+      "startMinimized": true,
       "userDataDir": "data/browser-profile",
       "waitMs": 1200,
       "blockResources": ["image", "media", "font", "stylesheet"],
@@ -416,6 +417,7 @@
     "patchrightBrowser": {
       "enabled": false,
       "headless": false,
+      "startMinimized": true,
       "userDataDir": "data/patchright-profile",
       "sourcePrefix": "Patchright",
       "waitMs": 1200,

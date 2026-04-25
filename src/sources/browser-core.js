@@ -30,7 +30,7 @@ export async function searchBrowserSourcesWithEngine(chromium, queries, config, 
 }
 
 async function createBrowserContext(chromium, browserConfig) {
-  const launchOptions = { headless: browserConfig.headless };
+  const launchOptions = buildLaunchOptions(browserConfig);
   const contextOptions = { locale: "es-CO", serviceWorkers: "block" };
 
   if (browserConfig.userDataDir) {
@@ -44,6 +44,16 @@ async function createBrowserContext(chromium, browserConfig) {
   const browser = await chromium.launch(launchOptions);
   const context = await browser.newContext(contextOptions);
   return { context, close: () => browser.close() };
+}
+
+function buildLaunchOptions(browserConfig) {
+  const args = [...(browserConfig.launchArgs ?? [])];
+  if (!browserConfig.headless && browserConfig.startMinimized) args.push("--start-minimized");
+
+  return {
+    headless: browserConfig.headless,
+    ...(args.length ? { args } : {})
+  };
 }
 
 async function installResourceBlocking(context, browserConfig) {
@@ -84,6 +94,7 @@ function urlPath(url) {
 }
 
 async function searchBrowserSource(page, source, query, config, browserConfig) {
+  await minimizeWindow(page, browserConfig);
   const url = source.searchUrl.replace("{query}", encodeURIComponent(query).replaceAll("%20", "+"));
   await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60_000 });
   await page.waitForTimeout(source.waitMs ?? browserConfig.waitMs ?? 1_500);
@@ -120,6 +131,21 @@ async function evaluateItems(page, source) {
     }
   }
   return [];
+}
+
+async function minimizeWindow(page, browserConfig) {
+  if (browserConfig.headless || !browserConfig.startMinimized) return;
+  if (page.__dealWatchMinimized) return;
+  page.__dealWatchMinimized = true;
+
+  try {
+    const session = await page.context().newCDPSession(page);
+    const { windowId } = await session.send("Browser.getWindowForTarget");
+    await session.send("Browser.setWindowBounds", { windowId, bounds: { windowState: "minimized" } });
+    await session.detach();
+  } catch {
+    // Chromium may reject this on some platforms; --start-minimized still applies.
+  }
 }
 
 function toListing(item, source, index, browserConfig) {

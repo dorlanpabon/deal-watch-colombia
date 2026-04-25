@@ -13,13 +13,16 @@ try {
   console.log(`api_fail ${err.message}`);
 }
 
-const context = await chromium.launchPersistentContext(config.sources.browser.userDataDir, {
-  headless: config.sources.browser.headless,
-  locale: "es-CO"
+const browserConfig = config.sources.browser;
+const context = await chromium.launchPersistentContext(browserConfig.userDataDir, {
+  headless: browserConfig.headless,
+  locale: "es-CO",
+  ...launchArgs(browserConfig)
 });
 
 try {
   const page = context.pages()[0] ?? await context.newPage();
+  await minimizeWindow(page, browserConfig);
   await page.goto("https://listado.mercadolibre.com.co/macbook-pro-m4-24gb", {
     waitUntil: "domcontentloaded",
     timeout: 60_000
@@ -31,4 +34,21 @@ try {
   if (items === 0) console.log(`browser_text ${text}`);
 } finally {
   await context.close();
+}
+
+function launchArgs(browserConfig) {
+  const args = [];
+  if (!browserConfig.headless && browserConfig.startMinimized) args.push("--start-minimized");
+  return args.length ? { args } : {};
+}
+
+async function minimizeWindow(page, browserConfig) {
+  if (browserConfig.headless || !browserConfig.startMinimized) return;
+  try {
+    const session = await page.context().newCDPSession(page);
+    const { windowId } = await session.send("Browser.getWindowForTarget");
+    await session.send("Browser.setWindowBounds", { windowId, bounds: { windowState: "minimized" } });
+    await session.detach();
+  } catch {
+  }
 }

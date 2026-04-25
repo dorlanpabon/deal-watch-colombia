@@ -66,7 +66,7 @@ Precio maximo puesto COP [13.000.000]:
 Exportar para IA [txt/json/all/none] [txt]:
 ```
 
-Enter usa el preset por defecto. El precio acepta `13000000`, `13.000.000`, `13m` o `8.5m`.
+Enter usa el preset por defecto. Si escribes otra busqueda, por ejemplo `MAC-MINI`, el CLI cambia tambien los terminos obligatorios y las queries internas de las fuentes para no seguir filtrando MacBook Pro. El precio acepta `13000000`, `13.000.000`, `13m` o `8.5m`.
 
 CLI directo:
 
@@ -209,6 +209,7 @@ npm run mercadolibre:refresh
 ## Patchright
 
 Todas las fuentes de navegador usan Patchright. La seccion `patchrightBrowser` queda como flujo separado de diagnostico/comparacion, pero el flujo normal `browser` tambien corre sobre Patchright.
+Si un flujo necesita navegador visible, `startMinimized: true` evita que la ventana quede al frente.
 
 ```powershell
 npm run patchright:check

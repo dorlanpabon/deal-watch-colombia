@@ -45,7 +45,11 @@ function parseArgs(args) {
 function applyCliOptions(config, options) {
   if (options.strictSpecs) applyStrictSpecs(config);
   if (options.looseSpecs) applyLooseSpecs(config);
-  if (options.queries?.length) config.queries = options.queries;
+  if (options.queries?.length) {
+    applyQueryProfile(config, options.queries, {
+      keepRequiredTerms: Object.hasOwn(options, "requiredTerm")
+    });
+  }
   if (options.minRamGb) config.criteria.minRamGb = Number(options.minRamGb);
   if (options.preferredMinRamGb) config.criteria.preferredMinRamGb = Number(options.preferredMinRamGb);
   if (options.maxLandedCop) config.criteria.maxLandedCop = Number(options.maxLandedCop);
@@ -82,7 +86,7 @@ async function promptSearchConfig(config, options) {
   try {
     const defaultProfile = config.profile ?? config.queries.join("; ");
     const query = (await rl.question(`Busqueda [${defaultProfile}]: `)).trim();
-    if (query) config.queries = query.split(";").map((item) => item.trim()).filter(Boolean);
+    if (query) applyQueryProfile(config, query.split(";"));
 
     const max = (await rl.question(`Precio maximo puesto COP [${formatCop(config.criteria.maxLandedCop)}]: `)).trim();
     if (max) config.criteria.maxLandedCop = parseCop(max, config.criteria.maxLandedCop);
@@ -151,4 +155,35 @@ function applyLooseSpecs(config) {
   config.criteria.requireMacBookPro = false;
   config.criteria.rejectUnknownRam = false;
   config.criteria.rejectMacBookAir = false;
+}
+
+function applyQueryProfile(config, queries, { keepRequiredTerms = false } = {}) {
+  const parsedQueries = queries.map((item) => String(item).trim()).filter(Boolean);
+  if (parsedQueries.length === 0) return;
+
+  config.queries = parsedQueries;
+  config.profile = parsedQueries.join("; ");
+  overrideSourceQueries(config, parsedQueries);
+  if (!keepRequiredTerms) config.criteria.requiredTerms = inferRequiredTerms(parsedQueries);
+}
+
+function overrideSourceQueries(config, queries) {
+  for (const group of [config.sources.browser, config.sources.patchrightBrowser]) {
+    for (const source of group?.sources ?? []) source.queries = queries;
+  }
+  for (const key of ["woocommerce"]) {
+    for (const source of config.sources[key] ?? []) source.queries = queries;
+  }
+}
+
+function inferRequiredTerms(queries) {
+  const stopWords = new Set(["de", "del", "la", "el", "los", "las", "para", "con", "y", "en", "oferta"]);
+  const terms = [];
+  for (const query of queries) {
+    for (const term of String(query).toLowerCase().split(/[^a-z0-9]+/i)) {
+      if (term.length < 2 || stopWords.has(term)) continue;
+      terms.push(term);
+    }
+  }
+  return [...new Set(terms)].slice(0, 5);
 }
